@@ -10,10 +10,10 @@ def read_cookbook_from_file(filename, code):
 			cookbook[line.strip()] = ingridients
 	return cookbook
 
-def get_shop_list_by_dishes(cook_book, dishes, person_count):
+def get_shop_list_by_dishes(cookbook, dishes, person_count):
 	shop_list = {}
 	for dish in dishes:
-		for ingridient in cook_book[dish]:
+		for ingridient in cookbook[dish]:
 			new_shop_list_item = dict(ingridient)
 			new_shop_list_item['quantity'] *= person_count
 			if new_shop_list_item['ingridient_name'] not in shop_list:
