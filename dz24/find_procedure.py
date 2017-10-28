@@ -37,9 +37,33 @@
 
 import os
 
-migrations = 'Migrations'
-current_dir = os.path.dirname(os.path.abspath(__file__))
+def generate_abs_path_migrations(): 
+	# Генерируем абсолютный путь до папки с миграциями (Задание №2)
+	migrations = 'Migrations'
+	current_dir = os.path.dirname(os.path.abspath(__file__))
+	abs_path_migrations = os.path.join(current_dir, migrations)
+	return abs_path_migrations
+
+def get_sql_files_in_folder(folder_path):
+	# Получаем из папки только файлы .sql в виде списка
+	files = os.listdir(folder_path)
+	sql_files = list(filter(lambda x: x.endswith('.sql'), files))
+	return sql_files
+
+def search_string_in_files(search_string, filelist, folder_path):
+	result_filelist=[]
+	for file in filelist:
+		with open(os.path.join(folder_path,file)) as f:
+			text = f.read()
+			if search_string in text:
+				result_filelist.append(file)
+				print(file)
+	return result_filelist
 
 if __name__ == '__main__':
-    # ваша логика
-    pass
+	folder_path = generate_abs_path_migrations()
+	files = get_sql_files_in_folder(folder_path)
+	while True:
+		search_string = input('Введите строку:	')
+		files = search_string_in_files(search_string, files, folder_path)
+		print('Всего: {}'.format(len(files)))
