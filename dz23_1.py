@@ -1,21 +1,20 @@
-def get_file_text(filename, encoding):
-	import chardet
-	with open(filename, encoding=encoding) as f:
-		data = f.read()
-		return data
-
-def get_json_data(filename, encoding):
-	import json
-	with open(filename, encoding=encoding) as f:
-		data = json.load(f)
-		return data
-
-def get_file_encoding(filename):
+def get_file_text(filename):
 	import chardet
 	with open(filename, 'rb') as f:
 		data = f.read()
-		result = chardet.detect(data)
-		return result['encoding']
+		encode = chardet.detect(data)['encoding']
+		text = bytes.decode(data, encode)
+		return text
+
+def get_json_data(filename):
+	import json
+	import chardet
+	with open(filename, 'rb') as f:
+		data = f.read()
+		encode = chardet.detect(data)['encoding']
+		json_string = bytes.decode(data, encode)
+		parsed_json = json.loads(json_string)
+		return parsed_json
 
 def parse_json_data(json_data):
 	data = ''
@@ -61,11 +60,9 @@ def main():
 		print('Введите имя файла для подсчёта:')
 		filename = input()
 		if '.txt' in filename:
-			encoding = get_file_encoding(filename)
-			data = get_file_text(filename, encoding)
+			data = get_file_text(filename)
 		elif '.json' in filename:
-			encoding = get_file_encoding(filename)
-			text = get_json_data(filename, encoding)
+			text = get_json_data(filename)
 			data = parse_json_data(text)
 		else:
 			print('Неподдерживаемое расширение файла, попробуйте еще раз.')
